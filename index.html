@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Search DLS24 Players</title><link href="https://theshinramen.github.io/DLS-Card-Creator/DLS23/style.css" rel="stylesheet">
+</head>
+<body>
+
+  <style>
+body {
+    background-image: url(assets/site/bg.png);
+    background-position: center;
+    background-size: cover;
+    background-attachment: inherit;
+    font-family: 'Renogare';
+    text-align: center;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+    body {text-shadow:none;}
+    input {color:#000;}
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: auto;
+            margin-top:10px;
+
+    }
+    .post img {
+    height: auto;
+    width: 100%;
+    border: 2px solid #f7f7f700;
+    margin: 2px;
+    display: block;
+    filter: brightness(37.5);
+    margin: 0 auto;
+}
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #000;
+    }
+    table td{padding: 10px;
+    font-size: 20px;
+    width: 50%;
+      color:white;
+      font-weight:bold;
+    border: 1px solid #445752;}
+table tr:nth-child(odd) {background:#333;}
+table tr:nth-child(even) {background:#333;}
+    table tr:nth-child(1) {background:#6b615e;}
+table tr:nth-child(2) {background:#8f8a0a;}
+        table tr:nth-child(3) {background:#6b615e;}
+
+        table tr:nth-child(4) {background:#6b615e;}
+
+        table tr:nth-child(5) {background:red;}
+
+        table tr:nth-child(6) {background:#6b615e;}
+
+        table tr:nth-child(7) {background:#22598f;}
+        table tr:nth-child(8) {background:#6b615e;}
+
+
+
+        .player-name {
+        font-size: 27px;
+    }
+
+  </style>
+<!-- Thêm ô tìm kiếm --><div class="title">Search DLS24 Player By HO TV FOOTBALL GAME</div><div class="ds1"><p>Ratings by rosieline_ and ThirdTimeCharm<br>List of latest DLS2024 player stats, Legendary player stats have been updated with 100% accuracy.
+<br>
+  RARE and Common player statistics are being updated</p><img src="https://www.ftgames.com/images/logos/DLS_Logo.png" width="70%"/>
+<input type="text" id="searchInput" placeholder="Search player name"></div>
+  <div id="playersTable"></div>
+<div class="ds1">    <div id="english">
+      <h2>Description</h2>
+      <p>
+        Welcome to the DLS24 Player Search Tool, your gateway to discovering top football players with comprehensive and specific statistics. This feature provides extensive player information, including their names, nationality, current club, position, preferred foot, ratings, and various metrics such as speed, ball control, strength, shooting abilities, and much more.
+        <br>
+        With this tool, you can search for players based on multiple criteria such as name, nationality, position, or specific attributes like speed, strength, and ball control. Football enthusiasts of all kinds can easily access detailed information about their favorite players, enabling them to prepare effectively for the Dream League Soccer 24 gaming experience.
+      </p>
+    </div>
+    <div id="vietnamese" style="display: yes;">
+      <h2>Mô tả công cụ DLS24</h2>
+      <p>
+        Chào mừng đến với công cụ tìm kiếm cầu thủ DLS24, nơi bạn có thể khám phá các cầu thủ bóng đá hàng đầu với thông tin chi tiết và số liệu cụ thể. Tính năng này cung cấp thông tin đầy đủ về các cầu thủ, bao gồm tên, quốc tịch, câu lạc bộ hiện tại, vị trí, chân thuận, điểm số và nhiều chỉ số khác nhau như tốc độ, kiểm soát bóng, sức mạnh, khả năng sút phạt, và nhiều hơn nữa.
+        <br>
+        Với công cụ này, bạn có thể tìm kiếm cầu thủ theo nhiều tiêu chí khác nhau như tên, quốc gia, vị trí, hoặc các chỉ số cụ thể như tốc độ, sức mạnh, và khả năng kiểm soát. Bất kỳ người hâm mộ bóng đá nào cũng có thể dễ dàng tra cứu thông tin chi tiết về cầu thủ mình quan tâm, giúp họ chuẩn bị tốt nhất cho trải nghiệm trong trò chơi Dream League Soccer 24.
+      </p>
+</div></div>
+<script>
+  // Function to fetch data from the provided JSON URL
+  function fetchJSONData(url) {
+    return fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok.');
+        }
+        return response.json();
+      })
+      .catch(error => {
+        console.error('There was a problem fetching the data:', error);
+      });
+  }
+
+  // Function to generate the table HTML
+  function generateTable(playerData) {
+    const playersTable = document.getElementById('playersTable');
+
+    playerData.forEach(player => {
+      const playerName = `${player["First Name"]} ${player["Last Name"]}`;
+      const playerTable = document.createElement('table');
+
+      const playerNameRow = document.createElement('tr');
+      const playerNameHeader = document.createElement('th');
+      playerNameHeader.colSpan = 2;
+      playerNameHeader.classList.add('player-name');
+      playerNameHeader.textContent = playerName;
+      playerNameRow.appendChild(playerNameHeader);
+      playerTable.appendChild(playerNameRow);
+
+      const position = player["Position"];
+      const keysToExclude = [];
+        keysToExclude.push("Total Stats", "Player ID", "Rating Change", "DLS 24 Status");
+
+      if (position === 'GK') {
+        keysToExclude.push("Stamina", "Shooting");
+      } else {
+        keysToExclude.push("Reactions (GK)", "Handling (GK)");
+      }
+
+      Object.keys(player).forEach(key => {
+        if (!keysToExclude.includes(key) && key !== "First Name" && key !== "Last Name") {
+          const row = document.createElement('tr');
+          const cell1 = document.createElement('td');
+          cell1.textContent = key;
+          const cell2 = document.createElement('td');
+          cell2.textContent = player[key];
+          row.appendChild(cell1);
+          row.appendChild(cell2);
+          playerTable.appendChild(row);
+        }
+      });
+
+      playersTable.appendChild(playerTable);
+    });
+  }
+
+  // URL of the JSON file on GitHub
+  const jsonURL = 'https://raw.githubusercontent.com/Dlsftg/Dlsftg/main/dls24.json';
+
+  // Fetch JSON data and generate the table
+  fetchJSONData(jsonURL)
+    .then(data => {
+      generateTable(data);
+    });
+</script>
+
+
+<script>
+  // Function to filter players by name
+  function filterPlayersByName() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toUpperCase();
+    const playerTables = document.querySelectorAll('#playersTable table');
+
+    playerTables.forEach(table => {
+      const playerNameHeader = table.querySelector('th[colspan="2"]');
+      if (playerNameHeader) {
+        const playerName = playerNameHeader.textContent || playerNameHeader.innerText;
+        if (playerName.toUpperCase().indexOf(filter) > -1) {
+          table.style.display = '';
+        } else {
+          table.style.display = 'none';
+        }
+      }
+    });
+  }
+
+  // Add event listener for the search input
+  document.getElementById('searchInput').addEventListener('input', filterPlayersByName);
+</script>
+
+
+
+</body>
+</html>
+
